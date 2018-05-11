@@ -1,4 +1,8 @@
-package BusinessLogic;
+package kspt.taxi.domain.order;
+
+import kspt.taxi.domain.user.Driver;
+import kspt.taxi.domain.user.Operator;
+import kspt.taxi.domain.user.Passenger;
 
 import java.util.Date;
 
@@ -74,7 +78,7 @@ public class Order {
     }
 
     public boolean setPassenger(Passenger passenger) {
-        if(passenger != null) {
+        if (passenger != null) {
             this.passenger = passenger;
             return true;
         }
@@ -90,7 +94,7 @@ public class Order {
     }
 
     public boolean setOperator(Operator operator) {
-        if(operator != null) {
+        if (operator != null) {
             this.operator = operator;
             return true;
         }
@@ -98,7 +102,7 @@ public class Order {
     }
 
     public boolean setOrderStatus(OrderStatus orderStatus) {
-        if(OrderStatus.isAvailable(this.orderStatus, orderStatus)){
+        if (OrderStatus.isAvailable(this.orderStatus, orderStatus)) {
             this.orderStatus = orderStatus;
             return true;
         }
@@ -106,7 +110,7 @@ public class Order {
     }
 
     public boolean setRating(float rating) {
-        if(rating > 0 && rating <= 5) {
+        if (rating > 0 && rating <= 5) {
             this.rating = rating;
             return true;
         }
@@ -114,7 +118,7 @@ public class Order {
     }
 
     public boolean setCreationDate(Date creationDate) {
-        if(creationDate.before(new Date())) {
+        if (creationDate.before(new Date())) {
             this.creationDate = creationDate;
             return true;
         }
@@ -122,7 +126,7 @@ public class Order {
     }
 
     public boolean setExecutionDate(Date executionDate) {
-        if(executionDate.after(creationDate)) {
+        if (executionDate.after(creationDate)) {
             this.executionDate = executionDate;
             return true;
         }

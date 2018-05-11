@@ -1,4 +1,4 @@
-package BusinessLogic;
+package kspt.taxi.domain.order;
 
 public class Complaint {
     private String passengerText;

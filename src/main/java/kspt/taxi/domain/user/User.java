@@ -1,7 +1,9 @@
-package BusinessLogic;
+package kspt.taxi.domain.user;
 
 
-public class User {
+import kspt.taxi.exceptions.NotAuthenticatedException;
+
+public abstract class User {
     private int id;
     private String login;
     private String name;
@@ -16,6 +18,17 @@ public class User {
         email = email_;
         authenticated = false;
         phone = phone_;
+
+    }
+
+    public boolean signIn(String password) {
+        //assert (!authenticated);
+        //authenticated = (new StorageRepository()).authenticateUser(login, password);
+        return authenticated;
+    }
+
+    public void signOut() {
+        authenticated = false;
     }
 
     public String getLogin() {
@@ -54,7 +67,16 @@ public class User {
         this.phone = phone;
     }
 
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
+    public String toString() {
+        return login + ":" + name + "<" + email + ">" + "<" + phone + ">";
+    }
+
+    public User getUser() {
+        return this;
+    }
+
+    public void checkAuthenticated() throws NotAuthenticatedException {
+        if (isAuthenticated()) return;
+        throw new NotAuthenticatedException(toString() + " is not authenticated");
     }
 }

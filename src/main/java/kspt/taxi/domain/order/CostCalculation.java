@@ -1,4 +1,4 @@
-package BusinessLogic;
+package kspt.taxi.domain.order;
 
 public class CostCalculation {
     private float routeLength;
@@ -6,7 +6,7 @@ public class CostCalculation {
     private float totalCost;
 
     public boolean setRouteLength(float routeLength) {
-        if(routeLength > 0) {
+        if (routeLength > 0) {
             this.routeLength = routeLength;
             return true;
         }

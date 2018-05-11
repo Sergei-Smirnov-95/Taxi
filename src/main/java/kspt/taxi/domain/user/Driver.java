@@ -1,9 +1,12 @@
-package BusinessLogic;
+package kspt.taxi.domain.user;
+
+import kspt.taxi.domain.order.Order;
+import kspt.taxi.domain.order.OrderStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Driver extends User{
+public class Driver extends User {
 
     private boolean busy;
     private float rating;
@@ -35,17 +38,17 @@ public class Driver extends User{
         this.rating = rating;
     }
 
-    public List<Order> getOrderList(List<Order> orderList){
+    public List<Order> getOrderList(List<Order> orderList) {
         List<Order> appointedOrderList = new ArrayList();
-        for(Order order : orderList){
+        for (Order order : orderList) {
             if (order.getDriver() == this && order.getOrderStatus() == OrderStatus.APPOINTED)
                 appointedOrderList.add(order);
         }
         return appointedOrderList;
     }
 
-    public boolean acceptOrder(Order order){
-        if(order.setOrderStatus(OrderStatus.ACCEPTED)) {
+    public boolean acceptOrder(Order order) {
+        if (order.setOrderStatus(OrderStatus.ACCEPTED)) {
             setBusy(true);
             return true;
         }
@@ -53,23 +56,23 @@ public class Driver extends User{
 
     }
 
-    public boolean declineOrder(Order order){
-        if(order.setOrderStatus(OrderStatus.DECLINED)) {
+    public boolean declineOrder(Order order) {
+        if (order.setOrderStatus(OrderStatus.DECLINED)) {
             setBusy(false);
             return true;
         }
         return false;
     }
 
-    public boolean setRouteLength(Order order, float routeLength){
+    public boolean setRouteLength(Order order, float routeLength) {
         return order.getCostCalculation().setRouteLength(routeLength);
     }
 
-    public void setWaitingTime(){
+    public void setWaitingTime() {
 
     }
 
-    public void refuteComplain(){
+    public void refuteComplain() {
 
     }
 

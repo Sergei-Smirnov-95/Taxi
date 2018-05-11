@@ -1,4 +1,7 @@
-package BusinessLogic;
+package kspt.taxi.domain.user;
+
+import kspt.taxi.domain.order.Order;
+import kspt.taxi.domain.order.OrderStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -8,12 +11,12 @@ public class Passenger extends User {
         super(id_, login_, name_, email_, phone_);
     }
 
-    void createOrder(List<Order> orderList, String sourceAddress, String destinationAddress){
-        Order order = new Order(sourceAddress,destinationAddress,this, new Date());
+    void createOrder(List<Order> orderList, String sourceAddress, String destinationAddress) {
+        Order order = new Order(sourceAddress, destinationAddress, this, new Date());
         orderList.add(order);
     }
 
-    boolean declineOrder(Order order){
+    boolean declineOrder(Order order) {
         return order.setOrderStatus(OrderStatus.DEAD);
     }
 

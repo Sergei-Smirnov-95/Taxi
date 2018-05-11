@@ -1,37 +1,37 @@
-package BusinessLogic;
+package kspt.taxi.domain.order;
 
 public enum OrderStatus {
     /* Just created by passenger */
     /* Can go to: PROCESSING, DEAD */
-    NEW ("NEW"),
+    NEW("NEW"),
 
     /* Processing by operator: choosing a driver */
     /* Can go to: APPOINTED, DEAD */
-    PROCESSING ("PROCESSING"),
+    PROCESSING("PROCESSING"),
 
     /* Appointed to driver */
     /* Can go to: PROCESSING, DECLINED */
-    APPOINTED ("APPOINTED"),
+    APPOINTED("APPOINTED"),
 
     /* Declined by driver */
     /* Can go to: PROCESSING */
-    DECLINED ("DECLINED"),
+    DECLINED("DECLINED"),
 
     /* Accepted by driver */
     /* Can go to: EXECUTED */
-    ACCEPTED ("ACCEPTED"),
+    ACCEPTED("ACCEPTED"),
 
     /* Order is executed */
     /* Can go to: <NULL> */
-    EXECUTED ("EXECUTED"),
+    EXECUTED("EXECUTED"),
 
     /* No available drivers or killed by passenger */
     /* Can go to: <NULL> */
-    DEAD ("DEAD");
+    DEAD("DEAD");
 
     private final String id;
 
-    OrderStatus(final String id){
+    OrderStatus(final String id) {
         this.id = id != null ? id : "NEW";
     }
 
@@ -39,9 +39,9 @@ public enum OrderStatus {
         return id;
     }
 
-    static boolean isAvailable(final OrderStatus previousState, final OrderStatus nextState){
+    static boolean isAvailable(final OrderStatus previousState, final OrderStatus nextState) {
         boolean result = false;
-        switch (previousState){
+        switch (previousState) {
             case NEW:
                 result = nextState == PROCESSING || nextState == DEAD;
                 break;

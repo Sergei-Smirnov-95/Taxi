@@ -1,6 +1,6 @@
-package Repository;
+package kspt.taxi.repository;
 
-import BusinessLogic.CostCalculation;
+import kspt.taxi.domain.order.CostCalculation;
 
 public class CostCalculationRepository extends Repository<CostCalculation> {
 }

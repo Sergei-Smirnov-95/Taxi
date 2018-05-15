@@ -3,9 +3,11 @@ package kspt.taxi.domain.user;
 import kspt.taxi.domain.order.Complaint;
 import kspt.taxi.domain.order.Order;
 import kspt.taxi.domain.order.OrderStatus;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class Operator extends User {
     public Operator(int id_, String login_, String name_, String email_, String phone_) {
         super(id_, login_, name_, email_, phone_);

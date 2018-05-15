@@ -1,79 +1,45 @@
 package kspt.taxi.domain.user;
 
-import kspt.taxi.domain.order.Order;
-import kspt.taxi.domain.order.OrderStatus;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Driver extends User {
-
+@ToString(exclude = "id")
+@EqualsAndHashCode(exclude = "id")
+@Slf4j
+public class Driver {
+    @Getter
+    private int id;
+    @Getter
+    private String login;
+    @Getter
+    private String name;
+    @Getter
+    @Setter
+    private String email;
+    @Getter
+    @Setter
+    private String phone;
+    @Getter
+    @Setter
+    private boolean authenticated;
+    @Getter
+    @Setter
     private boolean busy;
+    @Getter
+    @Setter
     private float rating;
 
-
     public Driver(int id_, String login_, String name_, String email_, String phone_, float rating_) {
-        super(id_, login_, name_, email_, phone_);
+        id = id_;
+        login = login_;
+        name = name_;
+        email = email_;
+        authenticated = false;
+        phone = phone_;
         busy = false;
         rating = rating_;
     }
-
-    public boolean isBusy() {
-        return busy;
-    }
-
-    public boolean isAvailable() {
-        return !busy;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setBusy(boolean busy) {
-        this.busy = busy;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
-    public List<Order> getOrderList(List<Order> orderList) {
-        List<Order> appointedOrderList = new ArrayList();
-        for (Order order : orderList) {
-            if (order.getDriver() == this && order.getOrderStatus() == OrderStatus.APPOINTED)
-                appointedOrderList.add(order);
-        }
-        return appointedOrderList;
-    }
-
-    public boolean acceptOrder(Order order) {
-        if (order.setOrderStatus(OrderStatus.ACCEPTED)) {
-            setBusy(true);
-            return true;
-        }
-        return false;
-
-    }
-
-    public boolean declineOrder(Order order) {
-        if (order.setOrderStatus(OrderStatus.DECLINED)) {
-            setBusy(false);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean setRouteLength(Order order, float routeLength) {
-        return order.getCostCalculation().setRouteLength(routeLength);
-    }
-
-    public void setWaitingTime() {
-
-    }
-
-    public void refuteComplain() {
-
-    }
-
 }

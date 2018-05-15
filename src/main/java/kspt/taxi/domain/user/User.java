@@ -2,13 +2,30 @@ package kspt.taxi.domain.user;
 
 
 import kspt.taxi.exceptions.NotAuthenticatedException;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
+@ToString(exclude = "id")
+@EqualsAndHashCode(exclude = "id")
+@Slf4j
 public abstract class User {
+    @Getter
     private int id;
+    @Getter
     private String login;
+    @Getter
     private String name;
+    @Getter
+    @Setter
     private String email;
+    @Getter
+    @Setter
     private String phone;
+    @Getter
+    @Setter
     private boolean authenticated;
 
     public User(int id_, String login_, String name_, String email_, String phone_) {
@@ -18,7 +35,6 @@ public abstract class User {
         email = email_;
         authenticated = false;
         phone = phone_;
-
     }
 
     public boolean signIn(String password) {
@@ -31,44 +47,8 @@ public abstract class User {
         authenticated = false;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
     public boolean isAuthenticated() {
         return authenticated;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String toString() {
-        return login + ":" + name + "<" + email + ">" + "<" + phone + ">";
     }
 
     public User getUser() {

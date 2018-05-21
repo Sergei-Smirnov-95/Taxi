@@ -1,45 +1,56 @@
 package kspt.taxi.domain.user;
 
 
+import kspt.taxi.domain.order.Order;
 import kspt.taxi.exceptions.NotAuthenticatedException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
-@Slf4j
+@Log
 public abstract class User {
     @Getter
-    private int id;
-    @Getter
-    private String login;
-    @Getter
-    private String name;
-    @Getter
-    @Setter
-    private String email;
-    @Getter
-    @Setter
-    private String phone;
-    @Getter
-    @Setter
-    private boolean authenticated;
+    protected int id;
 
-    public User(int id_, String login_, String name_, String email_, String phone_) {
-        id = id_;
+    @Getter
+    protected String login;
+
+    @Getter
+    protected String name;
+
+    @Getter
+    @Setter
+    protected String email;
+
+    @Getter
+    @Setter
+    protected String phone;
+
+    @Getter
+    @Setter
+    protected boolean authenticated;
+
+    @Getter
+    protected List<Order> orders;
+
+    public User(String login_, String name_, String email_, String phone_) {
         login = login_;
         name = name_;
         email = email_;
         authenticated = false;
         phone = phone_;
+        orders = new ArrayList();
     }
 
     public boolean signIn(String password) {
-        //assert (!authenticated);
-        //authenticated = (new StorageRepository()).authenticateUser(login, password);
         return authenticated;
     }
 
@@ -47,15 +58,11 @@ public abstract class User {
         authenticated = false;
     }
 
-    public boolean isAuthenticated() {
-        return authenticated;
-    }
-
     public User getUser() {
         return this;
     }
 
-    public void checkAuthenticated() throws NotAuthenticatedException {
+   void checkAuthenticated() throws NotAuthenticatedException {
         if (isAuthenticated()) return;
         throw new NotAuthenticatedException(toString() + " is not authenticated");
     }

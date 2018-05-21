@@ -3,137 +3,162 @@ package kspt.taxi.domain.order;
 import kspt.taxi.domain.user.Driver;
 import kspt.taxi.domain.user.Operator;
 import kspt.taxi.domain.user.Passenger;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.java.Log;
 
+import java.util.Calendar;
 import java.util.Date;
 
+@ToString(exclude = "id")
+@EqualsAndHashCode(exclude = "id")
+@Log
 public class Order {
-
+    @Getter
+    private int id;
+    @Getter
+    @Setter
     private String sourceAddress;
+    @Getter
+    @Setter
     private String destinationAddress;
+    @Getter
+    @Setter
     private Passenger passenger;
+    @Getter
+    @Setter
     private Driver driver;
+    @Getter
+    @Setter
     private Operator operator;
+    @Getter
+    @Setter
     private OrderStatus orderStatus;
+    @Getter
+    @Setter
     private float rating;
+    @Getter
+    @Setter
     private Date creationDate;
+    @Getter
+    @Setter
     private Date executionDate;
+    @Getter
+    @Setter
     private CostCalculation costCalculation;
-    private Complaint complaint;
+    @Getter
+    @Setter
+    private Recall recall;
 
-    public Order(String sourceAddress, String destinationAddress, Passenger passenger, Date creationDate) {
+    public Order(String sourceAddress, String destinationAddress, Passenger passenger) {
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
         this.passenger = passenger;
         this.orderStatus = OrderStatus.NEW;
-        this.creationDate = creationDate;
+        this.creationDate = Calendar.getInstance().getTime();
         this.costCalculation = new CostCalculation();
     }
 
-    public String getSourceAddress() {
-        return sourceAddress;
+    public boolean declineOrder() {
+        return setOrderStatus(OrderStatus.DEAD);
     }
 
-    public String getDestinationAddress() {
-        return destinationAddress;
+
+    public boolean appointOperator(Operator operator) {
+        setOperator(operator);
+        return setOrderStatus(OrderStatus.PROCESSING);
     }
 
-    public Passenger getPassenger() {
-        return passenger;
+    public boolean appointDriver(Driver driver) {
+        setDriver(driver);
+        return setOrderStatus(OrderStatus.APPOINTED);
     }
 
-    public Driver getDriver() {
-        return driver;
+    public boolean confirmDriver() {
+        return setOrderStatus(OrderStatus.ACCEPTED);
     }
 
-    public Operator getOperator() {
-        return operator;
+    public boolean rejectDriver(){
+        setDriver(null);
+        return setOrderStatus(OrderStatus.REJECTED);
     }
 
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public Date getExecutionDate() {
-        return executionDate;
-    }
-
-    public CostCalculation getCostCalculation() {
-        return costCalculation;
-    }
-
-    public void setSourceAddress(String sourceAddress) {
-        this.sourceAddress = sourceAddress;
-    }
-
-    public void setDestinationAddress(String destinationAddress) {
-        this.destinationAddress = destinationAddress;
-    }
-
-    public boolean setPassenger(Passenger passenger) {
-        if (passenger != null) {
-            this.passenger = passenger;
-            return true;
+    public boolean completeOrder(){
+        Date executeDate = Calendar.getInstance().getTime();
+        if (executeDate.after(creationDate)) {
+            setExecutionDate(executeDate);
+            return setOrderStatus(OrderStatus.EXECUTED);
         }
-        return false;
-    }
-
-    public boolean setDriver(Driver driver) {
-        if (driver != null && driver.isAvailable()) {
-            this.driver = driver;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean setOperator(Operator operator) {
-        if (operator != null) {
-            this.operator = operator;
-            return true;
-        }
-        return false;
+        else return false;
     }
 
     public boolean setOrderStatus(OrderStatus orderStatus) {
-        if (OrderStatus.isAvailable(this.orderStatus, orderStatus)) {
-            this.orderStatus = orderStatus;
-            return true;
-        }
-        return false;
+        if (!OrderStatus.isAvailable(this.orderStatus, orderStatus)) return false;
+        this.orderStatus = orderStatus;
+        return true;
     }
 
-    public boolean setRating(float rating) {
-        if (rating > 0 && rating <= 5) {
-            this.rating = rating;
-            return true;
-        }
-        return false;
-    }
+    public enum OrderStatus {
+        /* Just created by passenger */
+        /* Can go to: PROCESSING, DEAD */
+        NEW("NEW"),
 
-    public boolean setCreationDate(Date creationDate) {
-        if (creationDate.before(new Date())) {
-            this.creationDate = creationDate;
-            return true;
-        }
-        return false;
-    }
+        /* Processing by operator: choosing a driver */
+        /* Can go to: APPOINTED, DEAD */
+        PROCESSING("PROCESSING"),
 
-    public boolean setExecutionDate(Date executionDate) {
-        if (executionDate.after(creationDate)) {
-            this.executionDate = executionDate;
-            return true;
-        }
-        return false;
-    }
+        /* Appointed to driver */
+        /* Can go to: PROCESSING, DECLINED */
+        APPOINTED("APPOINTED"),
 
-    public void setCostCalculation(CostCalculation costCalculation) {
-        this.costCalculation = costCalculation;
+        /* Declined by driver */
+        /* Can go to: PROCESSING */
+        REJECTED("DECLINED"),
+
+        /* Accepted by driver */
+        /* Can go to: EXECUTED */
+        ACCEPTED("ACCEPTED"),
+
+        /* Order is executed */
+        /* Can go to: <NULL> */
+        EXECUTED("EXECUTED"),
+
+        /* No available drivers or killed by passenger */
+        /* Can go to: <NULL> */
+        DEAD("DEAD");
+
+        private final String id;
+
+        OrderStatus(final String id) {
+            this.id = id != null ? id : "NEW";
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        static boolean isAvailable(final OrderStatus previousState, final OrderStatus nextState) {
+            boolean result = false;
+            switch (previousState) {
+                case NEW:
+                    result = nextState == PROCESSING || nextState == DEAD;
+                    break;
+                case PROCESSING:
+                    result = nextState == APPOINTED || nextState == DEAD;
+                    break;
+                case APPOINTED:
+                    result = nextState == ACCEPTED || nextState == REJECTED;
+                    break;
+                case REJECTED:
+                    result = nextState == PROCESSING;
+                    break;
+                case ACCEPTED:
+                    result = nextState == EXECUTED;
+                    break;
+            }
+            return result;
+        }
     }
 }

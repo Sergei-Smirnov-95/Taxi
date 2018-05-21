@@ -16,7 +16,7 @@ import java.util.List;
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
 @Log
-public abstract class User {
+public class User {
     @Getter
     protected int id;
 

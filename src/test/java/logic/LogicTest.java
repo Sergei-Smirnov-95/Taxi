@@ -1,9 +1,10 @@
-package kspt.taxi.repository;
+package logic;
 
 import kspt.taxi.domain.order.Order;
 import kspt.taxi.domain.user.Driver;
 import kspt.taxi.domain.user.Operator;
 import kspt.taxi.domain.user.Passenger;
+import kspt.taxi.repository.Repository;
 import org.junit.After;
 import org.junit.Before;
 

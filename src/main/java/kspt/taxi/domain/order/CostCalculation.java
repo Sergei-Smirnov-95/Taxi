@@ -6,8 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.java.Log;
 
-@ToString(exclude = "id")
-@EqualsAndHashCode(exclude = "id")
 @Log
 public class CostCalculation {
 
@@ -27,6 +25,9 @@ public class CostCalculation {
     private float waitingTime;
 
     private float totalCost;
+
+    public CostCalculation() {
+    }
 
     public void getTotalCost() {
         totalCost = routeLength * COST_PER_KM +

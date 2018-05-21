@@ -13,6 +13,10 @@ public class Operator extends User {
         super(login_, name_, email_, phone_);
     }
 
+    public Operator(User user) {
+        super(user);
+    }
+
     public boolean handleOrder(Order order, float routeLength) throws NotAuthenticatedException {
         checkAuthenticated();
         if (order.getOperator() != null) return false;

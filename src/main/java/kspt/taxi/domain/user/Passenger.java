@@ -7,8 +7,12 @@ import kspt.taxi.exceptions.NotAuthenticatedException;
 
 public class Passenger extends User {
 
-    public Passenger(int id_, String login_, String name_, String email_, String phone_) {
+    public Passenger(String login_, String name_, String email_, String phone_) {
         super(login_, name_, email_, phone_);
+    }
+
+    public Passenger(User user) {
+        super(user);
     }
 
     public Order createOrder(String sourceAddress, String destinationAddress) throws NotAuthenticatedException {
@@ -34,7 +38,6 @@ public class Passenger extends User {
         if (order.getRecall() != null && score >= Driver.MIN_SCORE && score <= Driver.MAX_SCORE) {
             order.setRecall(recall);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 }

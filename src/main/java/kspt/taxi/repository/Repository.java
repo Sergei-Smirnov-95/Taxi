@@ -1,33 +1,54 @@
 package kspt.taxi.repository;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+import kspt.taxi.domain.order.Order;
+import kspt.taxi.domain.user.Driver;
+import kspt.taxi.domain.user.Passenger;
+import kspt.taxi.domain.user.User;
 import kspt.taxi.exceptions.DatabaseException;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import sun.reflect.generics.repository.AbstractRepository;
 
 import javax.management.Query;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public abstract class Repository<T> {
+@Log
+public class Repository {
 
-    protected List<T> list = new ArrayList();
+    private static Map<String, User> users = new HashMap<>();
+    private static Map<Integer, Order> orders = new HashMap<>();
+    private static Map<String, String> passwds = new HashMap<>();
 
-    public List<T> getAll() throws DatabaseException {
-        return null;
+    public Repository() {
     }
 
-    public T get(Query query) throws DatabaseException {
-        return null;
+    public boolean addUser(String login, String name, String email, String phone, String password) {
+        if (users.containsKey(login)) return false;
+
+        User newUser = new User(login, name, email, phone);
+        passwds.put(login, password);
+        return true;
     }
 
-    public void create(T item) throws DatabaseException {
-
+    public User getUser(String login) {
+        return users.get(login);
     }
 
-    public void update(T item) throws DatabaseException {
-
+    public boolean authenticateUser(User user, String password) {
+        return passwds.get(user.getLogin()).equals(password);
     }
 
-    public List<T> filter(Query query) throws DatabaseException {
-        return null;
+    public Order addOrder(int id, String sourceAddress, String destinationAddress, Passenger passenger) {
+        Order order = new Order(sourceAddress, destinationAddress, passenger);
+        orders.put(id, order);
+        return order;
+    }
+
+    public void clear() {
+        users.clear();
+        passwds.clear();
+        orders.clear();
     }
 }

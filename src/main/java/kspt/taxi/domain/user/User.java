@@ -3,12 +3,12 @@ package kspt.taxi.domain.user;
 
 import kspt.taxi.domain.order.Order;
 import kspt.taxi.exceptions.NotAuthenticatedException;
+import kspt.taxi.repository.Repository;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,17 @@ public abstract class User {
         orders = new ArrayList();
     }
 
+    public User(User user) {
+        login = user.login;
+        name = user.name;
+        email = user.email;
+        authenticated = false;
+        phone = user.phone;
+        orders = new ArrayList();
+    }
+
     public boolean signIn(String password) {
+        authenticated = (new Repository()).authenticateUser(this, password);
         return authenticated;
     }
 

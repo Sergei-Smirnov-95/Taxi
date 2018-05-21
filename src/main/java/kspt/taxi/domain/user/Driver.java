@@ -33,8 +33,10 @@ public class Driver extends User {
 
     public Driver(String login_, String name_, String email_, String phone_) {
         super(login_, name_, email_, phone_);
-        busy = false;
-        rating = 0;
+    }
+
+    public Driver(User user) {
+        super(user);
     }
 
     public boolean acceptOrder(Order order) throws NotAuthenticatedException, NoRightsException {

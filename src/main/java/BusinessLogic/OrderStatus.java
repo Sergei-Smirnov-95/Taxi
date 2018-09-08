@@ -13,7 +13,7 @@ public enum OrderStatus {
     /* Can go to: PROCESSING, DECLINED */
     APPOINTED ("APPOINTED"),
 
-    /* Declined by driver */
+    /*Declined by driver*/
     /* Can go to: PROCESSING */
     DECLINED ("DECLINED"),
 

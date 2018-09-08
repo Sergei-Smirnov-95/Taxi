@@ -9,8 +9,8 @@ public class Driver extends User{
     private float rating;
 
 
-    public Driver(int id_, String login_, String name_, String email_, String phone_, float rating_) {
-        super(id_, login_, name_, email_, phone_);
+    public Driver(int id_, String login_,String pwd_, String name_, String email_, String phone_, float rating_) {
+        super(id_, login_,pwd_, name_, email_, phone_,false);
         busy = false;
         rating = rating_;
     }
@@ -70,6 +70,10 @@ public class Driver extends User{
     }
 
     public void refuteComplain(){
+
+    }
+
+    public void calculateCoast(){
 
     }
 

@@ -13,8 +13,10 @@ public class Order {
     private float rating;
     private Date creationDate;
     private Date executionDate;
+    private Integer id;                 //set by operator
     private CostCalculation costCalculation;
     private Complaint complaint;
+
 
     public Order(String sourceAddress, String destinationAddress, Passenger passenger, Date creationDate) {
         this.sourceAddress = sourceAddress;
@@ -131,5 +133,14 @@ public class Order {
 
     public void setCostCalculation(CostCalculation costCalculation) {
         this.costCalculation = costCalculation;
+    }
+
+    @Override
+    public String toString() {
+        return "Order by "+
+                passenger.getName()+
+                " from "+sourceAddress +
+                " to "+ destinationAddress+
+                ". Date:"+ creationDate;
     }
 }

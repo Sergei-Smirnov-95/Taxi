@@ -22,8 +22,7 @@ public class CostCalculation {
     }
 
     public void setTotalCost(float totalCost) {
-        this.totalCost = routeLength * Tariff.costPerKm +
-                ((waitingTime > Tariff.freeMinutes) ? (waitingTime - Tariff.freeMinutes) * Tariff.costPerMin : 0);
+        this.totalCost = routeLength * Tariff.costPerKm + waitingTime * Tariff.costPerMin;
     }
 
     public float getRouteLength() {

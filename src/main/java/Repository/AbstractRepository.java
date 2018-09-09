@@ -1,13 +1,15 @@
 package Repository;
 
+import Exceptions.DatabaseException;
+
 import javax.management.Query;
 import java.sql.SQLException;
 import java.util.List;
 
 public interface AbstractRepository<T> {
 
-    List<T> Getall() throws DatabaseException;
-    T GetById(int id) throws  DatabaseException,SQLException;
+    List<T> getall() throws DatabaseException;
+    T getById(int id) throws  DatabaseException,SQLException;
     //T get(Query query) throws DatabaseException;
     void add(T item) throws DatabaseException;
     /*void update(List<T> lst) throws DatabaseException;

@@ -1,6 +1,6 @@
 package BusinessLogic;
 
-import Repository.DatabaseException;
+import Exceptions.DatabaseException;
 import Repository.RepoRealisation.DriverRepository;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class Operator extends User {
     public List<Driver> getAvailableDriverList(DriverRepository repo){
         List<Driver> lst= null ;
         try{
-            lst = repo.Getall();
+            lst = repo.getall();
             for(Driver item:lst)
             {
               if(item.isBusy())

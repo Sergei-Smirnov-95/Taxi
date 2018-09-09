@@ -25,6 +25,8 @@ public class User {
         return login;
     }
 
+    public String getPwd(){return pwd;}
+
     public String getName() {
         return name;
     }
@@ -35,6 +37,10 @@ public class User {
 
     public String getPhone() {
         return phone;
+    }
+
+    public void setId(int id){
+        this.id=id;
     }
 
     public boolean isAuthenticated() {

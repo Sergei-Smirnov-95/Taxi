@@ -16,6 +16,8 @@ public class Passenger extends User {
         return order;
     }
 
+
+
     boolean declineOrder(Order order){
         //System.out.println("Order declined by passenger");
         return order.setOrderStatus(OrderStatus.DEAD);

@@ -45,14 +45,19 @@ public class Main {
         }*/
         PassengerDatabase pasdb = new PassengerDatabase();
         pasdb.printConnectInfo();
-        /*try {
+        List<Passenger> paslst;
+        try {
             Passenger pas0 = pasdb.getById(1);
-            System.out.println(pas0);
+            //System.out.println(pas0);
+            paslst = pasdb.getall();
+            for (Passenger pas:paslst) {
+                System.out.println(pas);
+            }
         }
         catch (SQLException ex1){
 
             System.out.println("SQL Exception!");
-        }*/
+        }
 
     }
 }

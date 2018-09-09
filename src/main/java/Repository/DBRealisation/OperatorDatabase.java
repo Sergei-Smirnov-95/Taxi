@@ -1,17 +1,18 @@
 package Repository.DBRealisation;
 
-import BusinessLogic.Passenger;
-import BusinessLogic.User;
-import Exceptions.DatabaseException;
+import BusinessLogic.Operator;
 import Repository.DBService;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassengerDatabase extends DBService<Passenger> {
+public class OperatorDatabase extends DBService<Operator> {
     @Override
-    public Passenger getById(int id) throws SQLException{
+    public Operator getById(int id) throws SQLException {
         String selectSQL = "SELECT * FROM User WHERE id = ?;";
         PreparedStatement extractUserStatement = connection.prepareStatement(selectSQL);
         extractUserStatement.setInt(1, id);
@@ -25,13 +26,13 @@ public class PassengerDatabase extends DBService<Passenger> {
         String email = rs.getString("email");
         String phone = rs.getString("phone");
 
-        return new Passenger(id,login,pwd,name,email,phone);
+        return new Operator(id,login,pwd,name,email,phone);
 
     }
 
-    public List<Passenger> getall() throws SQLException{
+    public List<Operator> getall() throws SQLException{
 
-        List<Passenger> paslst = new ArrayList<>();
+        List<Operator> paslst = new ArrayList<>();
         String selectSQL = "SELECT User.id FROM User WHERE TypeUser = 1;";
         PreparedStatement extractUserStatement = connection.prepareStatement(selectSQL);
         ResultSet rs = extractUserStatement.executeQuery();
@@ -44,9 +45,9 @@ public class PassengerDatabase extends DBService<Passenger> {
         return paslst;
 
     }
-    public int add(Passenger item) throws SQLException{
+    public int add(Operator item) throws SQLException{
         String insertSQL = "INSERT INTO `User`(login, pwd, name, email, phone, authenticated, isBusy, rating, TypeUser) "+
-        "VALUES (\"?\",\"?\",\"?\",\"?\",\"?\",false, false, 0.0, 1);";
+                "VALUES (\"?\",\"?\",\"?\",\"?\",\"?\",false, false, 0.0, 1);";
         PreparedStatement insertStatement = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
         insertStatement.setString(1, item.getLogin());
         insertStatement.setString(2, item.getPwd());

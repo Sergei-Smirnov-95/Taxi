@@ -1,7 +1,6 @@
 package Repository;
 
 import Exceptions.DatabaseException;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -18,8 +17,10 @@ abstract public class DBService<T> implements AbstractRepository<T>{
     }
 
     public static Connection getMysqlConnection() {
+        //String urlstr;
+        //urlstr = "jdbc:mysql://[хост]:[порт]/[бд]?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
         try {
-            DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
+            DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
 
             StringBuilder url = new StringBuilder();
 
@@ -28,16 +29,19 @@ abstract public class DBService<T> implements AbstractRepository<T>{
                     append("localhost:").           //host name
                     append("3306/").                //port
                     append("taxidb?").          //db name
-                    append("user=root&").          //login
-                    append("password=Ser210295");       //password
+                    append("useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+                    System.out.println("URL: " + url + "\n");
 
-            System.out.println("URL: " + url + "\n");
-
-            connection = DriverManager.getConnection(url.toString());
-
+            connection = DriverManager.getConnection(url.toString(),"root","Ser210295");
+           // System.out.println("Connection ok");
             return connection;
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
+        }
+        finally {
+            //close connection
+            try { connection.close(); } catch(SQLException se) { /*can't do anything */ }
+
         }
         return null;
     }

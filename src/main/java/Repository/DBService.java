@@ -1,6 +1,7 @@
 package Repository;
 
 import Exceptions.DatabaseException;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -10,7 +11,7 @@ import java.util.List;
 
 
 abstract public class DBService<T> implements AbstractRepository<T>{
-    public Connection connection;
+    public static Connection connection;
 
     public DBService() {
         this.connection = getMysqlConnection();
@@ -32,18 +33,19 @@ abstract public class DBService<T> implements AbstractRepository<T>{
 
             System.out.println("URL: " + url + "\n");
 
-            Connection connection = DriverManager.getConnection(url.toString());
+            connection = DriverManager.getConnection(url.toString());
+
             return connection;
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
+    /*Override
+     public T getById(int id) throws SQLException {return null;}
     @Override
-    abstract public T getById(int id) throws DatabaseException, SQLException ;
-    @Override
-    abstract public List<T> getall() throws DatabaseException;
-
+     public List<T> getall() {return null;}
+*/
     public void printConnectInfo() {
         try {
             System.out.println("DB name: " + connection.getMetaData().getDatabaseProductName());

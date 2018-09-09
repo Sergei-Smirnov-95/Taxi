@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface AbstractRepository<T> {
 
-    List<T> getall() throws DatabaseException;
-    T getById(int id) throws  DatabaseException,SQLException;
+    List<T> getall() throws SQLException;
+    T getById(int id) throws  SQLException;
     //T get(Query query) throws DatabaseException;
     void add(T item) throws DatabaseException;
     /*void update(List<T> lst) throws DatabaseException;

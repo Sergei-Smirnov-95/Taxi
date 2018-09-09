@@ -44,17 +44,15 @@ public class Main {
             System.out.println("Database Exception!");
         }*/
         PassengerDatabase pasdb = new PassengerDatabase();
-        try {
+        pasdb.printConnectInfo();
+        /*try {
             Passenger pas0 = pasdb.getById(1);
             System.out.println(pas0);
         }
         catch (SQLException ex1){
 
             System.out.println("SQL Exception!");
-        }
-        catch (DatabaseException ex2){
+        }*/
 
-            System.out.println("DB Exception!");
-        }
     }
 }

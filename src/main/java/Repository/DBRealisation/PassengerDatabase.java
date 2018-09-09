@@ -6,11 +6,12 @@ import Exceptions.DatabaseException;
 import Repository.DBService;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PassengerDatabase extends DBService<Passenger> {
     @Override
-    public Passenger getById(int id) throws DatabaseException,SQLException{
+    public Passenger getById(int id) throws SQLException{
         String selectSQL = "SELECT * FROM User WHERE id = ?;";
         PreparedStatement extractUserStatement = connection.prepareStatement(selectSQL);
         extractUserStatement.setInt(1, id);
@@ -29,8 +30,20 @@ public class PassengerDatabase extends DBService<Passenger> {
 
     }
 
-    public List<Passenger> getall() throws DatabaseException{
-        return null;
+    public List<Passenger> getall() throws SQLException{
+
+        List<Passenger> paslst = new ArrayList<>();
+        String selectSQL = "SELECT User.id FROM User WHERE TypeUser = 1;";
+        PreparedStatement extractUserStatement = connection.prepareStatement(selectSQL);
+        ResultSet rs = extractUserStatement.executeQuery();
+
+
+        while (rs.next()) {
+            paslst.add(getById(rs.getInt("id")));
+        }
+
+        return paslst;
+
     }
     public void add(Passenger item) throws DatabaseException{}
 }

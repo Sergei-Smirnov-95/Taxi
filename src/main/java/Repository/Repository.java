@@ -3,6 +3,7 @@ package Repository;
 import Exceptions.DatabaseException;
 
 import javax.management.Query;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +12,12 @@ abstract public class Repository<T> implements AbstractRepository<T> {
     private List<T> list;//= new ArrayList();
 
     @Override
-    public  List<T> getall() throws DatabaseException {
+    public  List<T> getall() throws SQLException {
            //System.out.println("list of alls");
         return list;
     }
     @Override
-    public T getById(int id) throws  DatabaseException{return null;}/*{
+    public T getById(int id) throws  SQLException{return null;}/*{
         for (T item:list) {
             if(item.Getid() == id){
             }

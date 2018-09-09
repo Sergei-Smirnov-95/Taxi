@@ -3,6 +3,7 @@ package BusinessLogic;
 import Exceptions.DatabaseException;
 import Repository.RepoRealisation.DriverRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Operator extends User {
@@ -21,7 +22,7 @@ public class Operator extends User {
             }
             return lst;
         }
-        catch(DatabaseException DataEx)
+        catch(SQLException DataEx)
         {
             return lst;
         }

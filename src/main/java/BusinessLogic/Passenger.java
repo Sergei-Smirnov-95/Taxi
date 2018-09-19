@@ -1,5 +1,7 @@
 package BusinessLogic;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -10,13 +12,24 @@ public class Passenger extends User {
     }
 
     public Order createOrder( String sourceAddress, String destinationAddress){
-        Order order = new Order(sourceAddress,destinationAddress,this, new Date());
+        Order order = new Order(sourceAddress,destinationAddress,this.getId(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         //orderList.add(order);
         //System.out.println("Order created by "+this.getName());
         return order;
     }
 
-
+    public boolean loginPass(String pwd){
+        if(this != null)
+        {
+            String originpwd = this.getPwd();
+            if(originpwd.equals(pwd)){
+                this.setAuthenticated(true);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 
     boolean declineOrder(Order order){
         //System.out.println("Order declined by passenger");

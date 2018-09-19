@@ -1,25 +1,31 @@
-package Repository;
-
-import Exceptions.DatabaseException;
+package DataSource;
 
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 
 
-abstract public class DBService<T> implements AbstractRepository<T>{
-    public static Connection connection;
+public class DBService {
+    private static Connection connection;
+    private static DBService instance;
 
-    public DBService() {
+    public DBService()throws SQLException, IllegalAccessException {
         this.connection = getMysqlConnection();
     }
 
-    public static Connection getMysqlConnection() {
-        //String urlstr;
-        //urlstr = "jdbc:mysql://[хост]:[порт]/[бд]?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
-        try {
+    public static DBService getInstance()throws SQLException, IllegalAccessException{
+        if( instance == null){
+           instance = new DBService();
+        }
+        return instance;
+    }
+    public static Connection getConnection(){
+        return connection;
+    }
+
+    private static Connection getMysqlConnection() throws SQLException, IllegalAccessException{
+       try {
             DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
 
             StringBuilder url = new StringBuilder();
@@ -35,21 +41,16 @@ abstract public class DBService<T> implements AbstractRepository<T>{
             connection = DriverManager.getConnection(url.toString(),"root","Ser210295");
            // System.out.println("Connection ok");
             return connection;
-        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        finally {
-            //close connection
-            try { connection.close(); } catch(SQLException se) { /*can't do anything */ }
+        } catch (SQLException | InstantiationException | ClassNotFoundException e) {
+            //e.printStackTrace();
+            throw new SQLException();
+        } catch ( IllegalAccessException ex){
+           throw new IllegalAccessException();
+       }
 
-        }
-        return null;
+
+        //return null;
     }
-    /*Override
-     public T getById(int id) throws SQLException {return null;}
-    @Override
-     public List<T> getall() {return null;}
-*/
     public void printConnectInfo() {
         try {
             System.out.println("DB name: " + connection.getMetaData().getDatabaseProductName());

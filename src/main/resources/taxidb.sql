@@ -29,6 +29,7 @@ CREATE TABLE `Order` (
 	`waitingTime` FLOAT NOT NULL,
 	`totalCost` FLOAT NOT NULL,
 	`isPayed` BOOLEAN NOT NULL,
+	`complaint` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
 );
 

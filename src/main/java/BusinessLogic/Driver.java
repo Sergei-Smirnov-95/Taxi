@@ -35,6 +35,20 @@ public class Driver extends User{
         this.rating = rating;
     }
 
+    public boolean loginDriver(String pwd){
+        if(this != null)
+        {
+            String originpwd = this.getPwd();
+            if(originpwd.equals(pwd)){
+                this.setAuthenticated(true);
+                this.setBusy(false);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    /*
     public List<Order> getOrderList(List<Order> orderList){
         List<Order> appointedOrderList = new ArrayList();
         for(Order order : orderList){
@@ -75,6 +89,6 @@ public class Driver extends User{
 
     public void calculateCoast(){
 
-    }
+    }*/
 
 }

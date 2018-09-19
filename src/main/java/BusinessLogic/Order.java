@@ -1,32 +1,43 @@
 package BusinessLogic;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Order {
 
     private String sourceAddress;
     private String destinationAddress;
-    private Passenger passenger;
-    private Driver driver;
-    private Operator operator;
+    private int passengerId;
+    private int driverId;
+    private int operatorId;
     private OrderStatus orderStatus;
-    private float rating;
-    private Date creationDate;
-    private Date executionDate;
-    private Integer id;                 //set by operator
+//    private float rating;
+    private LocalDate creationDate;
+    private LocalDate executionDate;
+    private int id;
     private CostCalculation costCalculation;
     private Complaint complaint;
 
 
-    public Order(String sourceAddress, String destinationAddress, Passenger passenger, Date creationDate) {
+    public Order(String sourceAddress, String destinationAddress,int passengerId , LocalDate creationDate) {
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
-        this.passenger = passenger;
+        this.passengerId = passengerId;
         this.orderStatus = OrderStatus.NEW;
         this.creationDate = creationDate;
-        this.costCalculation = new CostCalculation();
+        this.costCalculation = new CostCalculation(0,0);
     }
 
+    public Order restoreOrder( int driverId, int operatorId,
+                        OrderStatus orderStatus, LocalDate executionDate, int id, float routelength,
+                             float waitingTime, float totalCost, String Complaint){
+        this.setDriverId(driverId);
+        this.setOperator(operatorId);
+        this.setOrderStatus(orderStatus);
+        this.setOrderId(id);
+        this.setExecutionDate(executionDate);
+        this.setCostCalculation( new CostCalculation(waitingTime,routelength));
+        return this ;
+    }
     public String getSourceAddress() {
         return sourceAddress;
     }
@@ -35,31 +46,31 @@ public class Order {
         return destinationAddress;
     }
 
-    public Passenger getPassenger() {
-        return passenger;
+    public int getPassenger() {
+        return passengerId;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public int getDriver() {
+        return driverId;
     }
 
-    public Operator getOperator() {
-        return operator;
+    public int getOperator() {
+        return operatorId;
     }
 
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public float getRating() {
+   /* public float getRating() {
         return rating;
     }
-
-    public Date getCreationDate() {
+*/
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public Date getExecutionDate() {
+    public LocalDate getExecutionDate() {
         return executionDate;
     }
 
@@ -75,28 +86,16 @@ public class Order {
         this.destinationAddress = destinationAddress;
     }
 
-    public boolean setPassenger(Passenger passenger) {
-        if(passenger != null) {
-            this.passenger = passenger;
-            return true;
-        }
-        return false;
+    public void setPassengerId(int passenger) {
+            this.passengerId = passenger;
     }
 
-    public boolean setDriver(Driver driver) {
-        if (driver != null && driver.isAvailable()) {
-            this.driver = driver;
-            return true;
-        }
-        return false;
+    public void setDriverId(int driver) {
+            this.driverId = driver;
     }
 
-    public boolean setOperator(Operator operator) {
-        if(operator != null) {
-            this.operator = operator;
-            return true;
-        }
-        return false;
+    public void setOperator(int operator) {
+            this.operatorId = operator;
     }
 
     public boolean setOrderStatus(OrderStatus orderStatus) {
@@ -106,7 +105,7 @@ public class Order {
         }
         return false;
     }
-
+/*
     public boolean setRating(float rating) {
         if(rating > 0 && rating <= 5) {
             this.rating = rating;
@@ -114,17 +113,14 @@ public class Order {
         }
         return false;
     }
-
-    public boolean setCreationDate(Date creationDate) {
-        if(creationDate.before(new Date())) {
+*/
+    public void setCreationDate(LocalDate creationDate) {
             this.creationDate = creationDate;
-            return true;
-        }
-        return false;
+
     }
 
-    public boolean setExecutionDate(Date executionDate) {
-        if(executionDate.after(creationDate)) {
+    public boolean setExecutionDate(LocalDate executionDate) {
+        if(executionDate.isAfter(creationDate)) {
             this.executionDate = executionDate;
             return true;
         }
@@ -135,10 +131,17 @@ public class Order {
         this.costCalculation = costCalculation;
     }
 
+    public void setOrderId(int id){
+        this.id = id;
+    }
+
+    public int getOrderId(){
+        return this.id;
+    }
     @Override
     public String toString() {
         return "Order by "+
-                passenger.getName()+
+                //passenger.getName()+
                 " from "+sourceAddress +
                 " to "+ destinationAddress+
                 ". Date:"+ creationDate;

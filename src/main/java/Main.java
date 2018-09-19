@@ -1,10 +1,6 @@
-import BusinessLogic.Order;
 import BusinessLogic.Passenger;
-import Exceptions.DatabaseException;
-import Repository.DBRealisation.PassengerDatabase;
-import Repository.DBService;
-import Repository.RepoRealisation.OrderRepository;
-import Repository.RepoRealisation.PassengerRepository;
+import DataSource.DBRealisation.OperatorDatabase;
+import DataSource.DBRealisation.PassengerDatabase;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -44,15 +40,16 @@ public class Main {
             System.out.println("Database Exception!");
         }*/
         PassengerDatabase pasdb = new PassengerDatabase();
-        pasdb.printConnectInfo();
+        OperatorDatabase opdb = new OperatorDatabase();
+        Passenger passenger1 = new Passenger(1, "gen", "1122","Gena", "bb11", "444444");
+
         List<Passenger> paslst;
         try {
-            Passenger pas0 = pasdb.getById(1);
-            //System.out.println(pas0);
             paslst = pasdb.getall();
             for (Passenger pas:paslst) {
                 System.out.println(pas);
             }
+
         }
         catch (SQLException ex1){
 

@@ -1,9 +1,5 @@
 package BusinessLogic;
 
-import Exceptions.DatabaseException;
-import Repository.RepoRealisation.DriverRepository;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class Operator extends User {
@@ -11,31 +7,36 @@ public class Operator extends User {
         super(id_, login_, pwd_, name_, email_, phone_,false);
     }
 
-    public List<Driver> getAvailableDriverList(DriverRepository repo){
-        List<Driver> lst= null ;
-        try{
-            lst = repo.getall();
-            for(Driver item:lst)
-            {
-              if(item.isBusy())
-                  lst.remove(item);
-            }
-            return lst;
-        }
-        catch(SQLException DataEx)
-        {
-            return lst;
-        }
-    }
-
     public boolean handleOrder(Order order){
-        return order.setOrderStatus(OrderStatus.PROCESSING) && order.setOperator(this);
+        order.setOperator(this.getId());
+        return order.setOrderStatus(OrderStatus.PROCESSING) ;
     }
 
-    public boolean appointDriverToOrder(Order order, Driver driver){
-        return order.setDriver(driver) && order.setOrderStatus(OrderStatus.APPOINTED);
+    public boolean loginOperator(String pwd){
+        if(this != null)
+        {
+            String originpwd = this.getPwd();
+            if(originpwd.equals(pwd)){
+                this.setAuthenticated(true);
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
-
+    public List<Driver> getAvailableDrivers(List<Driver> drlist){
+        for (Driver item : drlist) {
+            if (item.isBusy() == true) {
+                drlist.remove(item);
+            }
+        }
+        return drlist;
+    }
+/*
+    public boolean appointDriverToOrder(Order order, int driver){
+        return order.setDriverId(driver) && order.setOrderStatus(OrderStatus.APPOINTED);
+    }
+*/
     public boolean confirmComplaint(Complaint complaint){
         if(!complaint.getPassengerText().isEmpty()) {
             complaint.setConfirmed(true);

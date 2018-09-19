@@ -20,6 +20,7 @@ public class User {
         pwd = pwd_;
         authenticated = authenticated_;
     }
+    public int getId(){return id;}
 
     public String getLogin() {
         return login;

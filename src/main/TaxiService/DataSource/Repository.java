@@ -11,6 +11,7 @@ import DataSource.DBRealisation.PassengerDatabase;
 import Exceptions.DBAccessException;
 import Exceptions.DBConnectionException;
 import Exceptions.DatabaseException;
+import Exceptions.HaveNotUserEx;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -107,7 +108,7 @@ public class Repository  {
 
     }
 
-    public Operator getOperatorByLogin(String login) throws DBConnectionException{
+    public Operator getOperatorByLogin(String login) throws DBConnectionException, HaveNotUserEx{
         if(oplist!=null ){
             for (Operator item : oplist) {
                 if (item.getLogin().equals(login)) {
@@ -116,7 +117,11 @@ public class Repository  {
             }
         }
         try{
-            return operatorDatabase.getByLogin(login);
+            Operator op = operatorDatabase.getByLogin(login);
+            if(op == null) {
+                throw new HaveNotUserEx();
+            }
+            return op;
         }
         catch (SQLException ex){
             throw new DBConnectionException();
@@ -141,7 +146,7 @@ public class Repository  {
 
     }
 
-    public Driver getDriverByLogin(String login) throws DBConnectionException{
+    public Driver getDriverByLogin(String login) throws DBConnectionException,HaveNotUserEx{
         if(drlist!=null ){
             for (Driver item : drlist) {
                 if (item.getLogin().equals(login)) {
@@ -150,7 +155,13 @@ public class Repository  {
             }
         }
         try{
-            return driverDatabase.getByLogin(login);
+            Driver dr = driverDatabase.getByLogin(login);
+            if (dr == null)
+            {
+                throw new HaveNotUserEx();
+            }
+            return dr;
+
         }
         catch (SQLException ex){
             throw new DBConnectionException();
@@ -215,7 +226,7 @@ public class Repository  {
 
     }
 
-    public Passenger getPassengerByLogin(String login) throws DBConnectionException{
+    public Passenger getPassengerByLogin(String login) throws DBConnectionException,HaveNotUserEx{
         if(paslist!=null ){
             for (Passenger item : paslist) {
                 if (item.getLogin().equals(login)) {
@@ -224,7 +235,12 @@ public class Repository  {
             }
         }
         try{
-            return passengerDatabase.getByLogin(login);
+            Passenger pas = passengerDatabase.getByLogin(login);
+            if(pas== null)
+            {
+                throw new HaveNotUserEx();
+            }
+            return pas;
         }
         catch (SQLException ex){
             throw new DBConnectionException();

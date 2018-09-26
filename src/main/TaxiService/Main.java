@@ -1,12 +1,26 @@
+
 import BusinessLogic.Passenger;
 import DataSource.DBRealisation.OperatorDatabase;
 import DataSource.DBRealisation.PassengerDatabase;
+import GUI.Login;
+import GUI.NewUserForm;
 
+import javax.swing.*;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
+    static  private String currentLogin;
     public static void main(String... args) {
+        Login login = new Login();
+        login.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        //NewUserForm uf = new NewUserForm();
+        //uf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+
+
+}
         /*//Add new passangers
         Passenger passenger0 = new Passenger(0, "log1", "Seriy", "cc11", "3333333");
         Passenger passenger1 = new Passenger(1, "log2", "Volk", "bb11", "444444");
@@ -39,7 +53,8 @@ public class Main {
         {
             System.out.println("Database Exception!");
         }*/
-        PassengerDatabase pasdb = new PassengerDatabase();
+///////////
+        /*PassengerDatabase pasdb = new PassengerDatabase();
         OperatorDatabase opdb = new OperatorDatabase();
         Passenger passenger1 = new Passenger(1, "gen", "1122","Gena", "bb11", "444444");
 
@@ -55,6 +70,4 @@ public class Main {
 
             System.out.println("SQL Exception!");
         }
-
-    }
-}
+        */

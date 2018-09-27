@@ -1,14 +1,14 @@
 package FACADE;
 
-import BusinessLogic.Driver;
-import BusinessLogic.Operator;
-import BusinessLogic.Passenger;
-import BusinessLogic.User;
+import BusinessLogic.*;
 import DataSource.Repository;
 import Exceptions.DBAccessException;
 import Exceptions.DBConnectionException;
+import Exceptions.HaveNotOrderEx;
 import Exceptions.HaveNotUserEx;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Facade {
@@ -88,11 +88,11 @@ public class Facade {
         return false;
     }
     }
-
+/*
     public List<Driver> getAvailableDrivers(Operator op){
         List<Driver> drlist = repository.getDrivers();
         return op.getAvailableDrivers(drlist);
-    }
+    }*/
 
     public void addNewPassenger(int id_, String login_,String pwd_, String name_, String email_, String phone_) throws DBConnectionException {
         Passenger pas = new Passenger(id_,login_,pwd_,name_,email_,phone_);
@@ -107,5 +107,47 @@ public class Facade {
     public void addNewOperator(int id_, String login_,String pwd_, String name_, String email_, String phone_) throws DBConnectionException{
         Operator operator = new Operator(id_,login_,pwd_,name_,email_,phone_);
             repository.addOperator(operator);
+    }
+
+    public void addNewOrder(String sourceAddr, String destAddr, String userLogin, LocalDate creationDate_) throws DBConnectionException, HaveNotUserEx {
+        int passId = repository.getPassengerByLogin(userLogin).getId();
+        Order or = new Order(sourceAddr, destAddr,passId, creationDate_);
+        repository.addOrder(or);
+    }
+
+    public List<Order> getOrdersByDriver(String login) throws HaveNotOrderEx, HaveNotUserEx, DBConnectionException{
+        List<Order> orlist =  repository.getOrders();
+        Driver driver = repository.getDriverByLogin(login);
+        if( orlist != null ){
+            return driver.getOrderList(orlist);
+        }
+        else
+        {
+            throw new HaveNotOrderEx();
+        }
+    }
+
+    public List<Order> getAppointedOrdersByDriver(String login)throws HaveNotOrderEx, HaveNotUserEx,DBConnectionException{
+        List<Order> orlist =  repository.getOrders();
+        Driver driver = repository.getDriverByLogin(login);
+        if( orlist != null ){
+          return driver.getAppointedList(orlist);}
+        else
+        {
+            throw new HaveNotOrderEx();
+        }
+
+    }
+    public void acceptRequest(int OrderId, String driverLogin) throws DBConnectionException{
+
+            Order or = repository.getOrderById(OrderId);
+            or.setOrderStatus(OrderStatus.ACCEPTED);
+
+    }
+    public void declineRequest(int OrderId, String driverLogin) throws DBConnectionException{
+
+        Order or = repository.getOrderById(OrderId);
+        or.setOrderStatus(OrderStatus.DECLINED);
+
     }
 }

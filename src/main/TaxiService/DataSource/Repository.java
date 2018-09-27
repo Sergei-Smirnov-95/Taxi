@@ -8,10 +8,7 @@ import DataSource.DBRealisation.DriverDatabase;
 import DataSource.DBRealisation.OperatorDatabase;
 import DataSource.DBRealisation.OrderDatabase;
 import DataSource.DBRealisation.PassengerDatabase;
-import Exceptions.DBAccessException;
-import Exceptions.DBConnectionException;
-import Exceptions.DatabaseException;
-import Exceptions.HaveNotUserEx;
+import Exceptions.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,7 +29,7 @@ public class Repository  {
     private static List<Order> orlist= new ArrayList<>();
 
 
-
+/*
     public List<Driver> getDrivers(){
         return drlist;
     }
@@ -42,7 +39,7 @@ public class Repository  {
     public List<Order> getOrders(){
         return orlist;
     }
-
+*/
     public static Repository getInstance() throws DBConnectionException,DBAccessException {
         if(instance == null){
             synchronized (Repository.class) {
@@ -247,11 +244,11 @@ public class Repository  {
         }
 
     }
-    /*
+
     public Order getOrderById(int id) throws DBConnectionException{
         if(oplist!=null ){
             for (Order item : orlist) {
-                if (item.getId() == id) {
+                if (item.getOrderId() == id) {
                     return item;
                 }
             }
@@ -265,6 +262,36 @@ public class Repository  {
 
     }
 
-    */
+    /*TODO: не забыть положить значения в базу. ВОзможно только после полного формирования заказа(DriverId!)*/
+    public void addOrder(Order item) throws DBConnectionException{
+       /* try{
+            int id = orderDatabase.NewOrder(item);
+            if(id != -1)
+            {
+                item.setOrderId(id);*/
+                orlist.add(item);
+            /*}
+            else
+            {
+                throw new DBConnectionException();
+            }
+        }
+        catch (SQLException ex){
+            throw new DBConnectionException();
+        }
+*/
+    }
 
+    public List<Order> getOrders() throws DBConnectionException{
+        if (orlist != null) {
+            return orlist;
+        }
+        else {
+            try {
+                return orderDatabase.getAllOrders();
+            }catch (SQLException ex){
+            throw new DBConnectionException();
+        }
+        }
+    }
 }

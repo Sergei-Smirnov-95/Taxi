@@ -1,5 +1,8 @@
 package BusinessLogic;
 
+import Exceptions.HaveNotOrderEx;
+import Exceptions.HaveNotUserEx;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,16 +51,28 @@ public class Driver extends User{
         }
         return false;
     }
-    /*
-    public List<Order> getOrderList(List<Order> orderList){
+
+    public List<Order> getOrderList(List<Order> orderList) throws HaveNotOrderEx {
+        List<Order> OrderList = new ArrayList();
+        for(Order order : orderList){
+            if (order.getDriver() == this.getId() && order.getOrderStatus() != OrderStatus.APPOINTED)
+                OrderList.add(order);
+        }
+        if( OrderList == null )
+            throw new HaveNotOrderEx();
+        return OrderList;
+    }
+    public List<Order> getAppointedList(List<Order> orderList) throws HaveNotOrderEx{
         List<Order> appointedOrderList = new ArrayList();
         for(Order order : orderList){
-            if (order.getDriver() == this && order.getOrderStatus() == OrderStatus.APPOINTED)
+            if (order.getDriver() == this.getId() && order.getOrderStatus() == OrderStatus.APPOINTED)
                 appointedOrderList.add(order);
         }
+        if( appointedOrderList == null )
+            throw new HaveNotOrderEx();
         return appointedOrderList;
     }
-
+/*
     public boolean acceptOrder(Order order){
         if(order.setOrderStatus(OrderStatus.ACCEPTED)) {
             setBusy(true);

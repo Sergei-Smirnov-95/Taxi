@@ -57,7 +57,9 @@ public class NewUserForm extends JFrame {
                 String phone = Phone.getText();
                 String name = Name.getText();
                 String userPass  = new String (Password.getPassword());
-                if(userLogin.isEmpty() || userPass.isEmpty() || email.isEmpty() || phone.isEmpty() || name.isEmpty()){
+                if(userLogin.isEmpty() || userLogin.equals("Login") || userPass.isEmpty() ||
+                        userPass.equals("Password") ||email.isEmpty() || email.equals("Email")||
+                        phone.isEmpty() || phone.equals("Phone") || name.isEmpty() || name.equals("Name")){
                     JOptionPane.showMessageDialog(new JFrame(),
                             "Please, enter data about yourself", "Warning",
                             JOptionPane.WARNING_MESSAGE);
@@ -88,6 +90,11 @@ public class NewUserForm extends JFrame {
                                 thisFrame.dispose();
                                 DriverForm driverForm = new DriverForm(userLogin);
                                 driverForm.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                            } else
+                            {
+                                JOptionPane.showMessageDialog(new JFrame(),
+                                        "Choose type of user", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                         }
                         catch (DBConnectionException ex){
@@ -99,7 +106,7 @@ public class NewUserForm extends JFrame {
                     }
                 } catch (DBConnectionException ex){
                     JOptionPane.showMessageDialog(new JFrame(),
-                            ex.toString(),  "Cannot connect to DB",
+                            ex.toString(),  "Allert",
                             JOptionPane.WARNING_MESSAGE);
                 }
 

@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDatabase {
     private Connection connection;
@@ -68,13 +70,73 @@ public class OrderDatabase {
         Order or = new Order(sourceAddr, destAddr,passId, creationDate);
         if(isPayed){
             return  or.restoreOrder(driverId, operatorId,
-                    OrderStatus.EXECUTED, executionDate, id,  routeLength, waitingTime, totalCost, complaint);
+                    OrderStatus.EXECUTED, executionDate, id,  routeLength, waitingTime, totalCost, complaint, true);
         }
         else
             return  or.restoreOrder(driverId, operatorId,
-                    OrderStatus.ACCEPTED, executionDate, id,  routeLength, waitingTime, totalCost, complaint);
+                    OrderStatus.PROCESSING, executionDate, id,  routeLength, waitingTime, totalCost, complaint, false);
 
+    }
+    public Order getById(int id) throws SQLException {
+        String selectSQL = "SELECT * FROM Order WHERE id= ?;";
+        PreparedStatement extractUserStatement = connection.prepareStatement(selectSQL);
+        extractUserStatement.setInt(1, id);
+        ResultSet rs = extractUserStatement.executeQuery();
+
+        if (!rs.next()) return null;
+        String sourceAddr = rs.getString("sourceAddr");
+        String destAddr = rs.getString("destAddr");
+        LocalDate creationDate = rs.getDate("creationDate").toLocalDate();
+        LocalDate executionDate = rs.getDate("executionDate").toLocalDate();
+        int driverId = rs.getInt("driverId");
+        int passId = rs.getInt("passId");
+        int operatorId = rs.getInt("operatorId");
+        float routeLength = rs.getFloat("routeLength");
+        float waitingTime = rs.getFloat("waitingTIme");
+        float totalCost = rs.getFloat("totalCost");
+        boolean isPayed = rs.getBoolean("isPayed");
+        String complaint = rs.getString("complaint");
+        Order or = new Order(sourceAddr, destAddr,passId, creationDate);
+        if(isPayed){
+            return  or.restoreOrder(driverId, operatorId,
+                    OrderStatus.EXECUTED, executionDate, id,  routeLength, waitingTime, totalCost, complaint, true);
+        }
+        else
+            return  or.restoreOrder(driverId, operatorId,
+                    OrderStatus.PROCESSING, executionDate, id,  routeLength, waitingTime, totalCost, complaint, false);
 
     }
 
+    public List<Order> getAllOrders() throws SQLException{
+        String selectSQL = "SELECT * FROM Order;";
+        PreparedStatement extractUserStatement = connection.prepareStatement(selectSQL);
+        ResultSet rs = extractUserStatement.executeQuery();
+        List<Order> orlist = new ArrayList();
+        while (rs.next()) {
+            String sourceAddr = rs.getString("sourceAddr");
+            String destAddr = rs.getString("destAddr");
+            LocalDate creationDate = rs.getDate("creationDate").toLocalDate();
+            LocalDate executionDate = rs.getDate("executionDate").toLocalDate();
+            int driverId = rs.getInt("driverId");
+            int passId = rs.getInt("passId");
+            int operatorId = rs.getInt("operatorId");
+            int id = rs.getInt("id");
+            float routeLength = rs.getFloat("routeLength");
+            float waitingTime = rs.getFloat("waitingTIme");
+            float totalCost = rs.getFloat("totalCost");
+            boolean isPayed = rs.getBoolean("isPayed");
+            String complaint = rs.getString("complaint");
+            Order or = new Order(sourceAddr, destAddr, passId, creationDate);
+
+            if (isPayed) {
+                orlist.add( or.restoreOrder(driverId, operatorId,
+                        OrderStatus.EXECUTED, executionDate, id, routeLength,
+                        waitingTime, totalCost, complaint, true));
+            } else
+                orlist.add(or.restoreOrder(driverId, operatorId,
+                        OrderStatus.PROCESSING, executionDate, id,
+                        routeLength, waitingTime, totalCost, complaint, false));
+        }
+        return orlist;
+    }
 }

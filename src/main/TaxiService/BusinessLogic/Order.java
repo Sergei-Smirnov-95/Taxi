@@ -14,6 +14,7 @@ public class Order {
     private LocalDate creationDate;
     private LocalDate executionDate;
     private int id;
+    private boolean isPaied;
     private CostCalculation costCalculation;
     private Complaint complaint;
 
@@ -25,17 +26,19 @@ public class Order {
         this.orderStatus = OrderStatus.NEW;
         this.creationDate = creationDate;
         this.costCalculation = new CostCalculation(0,0);
+        this.isPaied= false;
     }
 
     public Order restoreOrder( int driverId, int operatorId,
                         OrderStatus orderStatus, LocalDate executionDate, int id, float routelength,
-                             float waitingTime, float totalCost, String Complaint){
+                             float waitingTime, float totalCost, String Complaint, boolean isPaied){
         this.setDriverId(driverId);
         this.setOperator(operatorId);
         this.setOrderStatus(orderStatus);
         this.setOrderId(id);
         this.setExecutionDate(executionDate);
         this.setCostCalculation( new CostCalculation(waitingTime,routelength));
+        this.isPaied = isPaied;
         return this ;
     }
     public String getSourceAddress() {

@@ -2,6 +2,7 @@
 import BusinessLogic.Passenger;
 import DataSource.DBRealisation.OperatorDatabase;
 import DataSource.DBRealisation.PassengerDatabase;
+import GUI.DriverForm;
 import GUI.Login;
 import GUI.NewUserForm;
 
@@ -14,8 +15,7 @@ public class Main {
     public static void main(String... args) {
         Login login = new Login();
         login.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        //NewUserForm uf = new NewUserForm();
-        //uf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
     }
 
 

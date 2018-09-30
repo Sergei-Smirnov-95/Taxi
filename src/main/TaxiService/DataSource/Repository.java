@@ -10,8 +10,8 @@ import DataSource.DBRealisation.OrderDatabase;
 import DataSource.DBRealisation.PassengerDatabase;
 import Exceptions.*;
 
-import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Repository  {
@@ -29,17 +29,7 @@ public class Repository  {
     private static List<Order> orlist= new ArrayList<>();
 
 
-/*
-    public List<Driver> getDrivers(){
-        return drlist;
-    }
-    public List<Passenger> getPassengers(){
-        return paslist;
-    }
-    public List<Order> getOrders(){
-        return orlist;
-    }
-*/
+
     public static Repository getInstance() throws DBConnectionException,DBAccessException {
         if(instance == null){
             synchronized (Repository.class) {
@@ -58,7 +48,7 @@ public class Repository  {
             if (operatorDatabase == null) operatorDatabase = new OperatorDatabase();
             oplist = operatorDatabase.getall();
             if (orderDatabase == null) orderDatabase = new OrderDatabase();
-            //orlist = orderDatabase.getall();
+            orlist = orderDatabase.getAllOrders();
             if (passengerDatabase == null) passengerDatabase = new PassengerDatabase();
             paslist = passengerDatabase.getall();
 
@@ -70,7 +60,7 @@ public class Repository  {
     }
 
     public Operator getOperatorById(int id) throws DBConnectionException{
-        if(oplist!=null ){
+        if(!oplist.isEmpty() ){
             for (Operator item : oplist) {
                 if (item.getId() == id) {
                     return item;
@@ -106,7 +96,7 @@ public class Repository  {
     }
 
     public Operator getOperatorByLogin(String login) throws DBConnectionException, HaveNotUserEx{
-        if(oplist!=null ){
+        if(!oplist.isEmpty() ){
             for (Operator item : oplist) {
                 if (item.getLogin().equals(login)) {
                     return item;
@@ -127,7 +117,7 @@ public class Repository  {
     }
 
     public Driver getDriverById(int id) throws DBConnectionException{
-        if(drlist!=null ){
+        if(!drlist.isEmpty() ){
             for (Driver item : drlist) {
                 if (item.getId() == id) {
                     return item;
@@ -143,8 +133,22 @@ public class Repository  {
 
     }
 
+    public List<Driver> getDrivers() throws DBConnectionException{
+        if(!drlist.isEmpty() ){
+            return drlist;
+        }
+        else {
+            try {
+                return driverDatabase.getall();
+            } catch (SQLException ex) {
+                throw new DBConnectionException();
+            }
+        }
+
+    }
+
     public Driver getDriverByLogin(String login) throws DBConnectionException,HaveNotUserEx{
-        if(drlist!=null ){
+        if(!drlist.isEmpty() ){
             for (Driver item : drlist) {
                 if (item.getLogin().equals(login)) {
                     return item;
@@ -187,7 +191,7 @@ public class Repository  {
     }
 
     public Passenger getPassengerById(int id) throws DBConnectionException{
-        if(paslist!=null ){
+        if(!paslist.isEmpty() ){
             for (Passenger item : paslist) {
                 if (item.getId() == id) {
                     return item;
@@ -224,7 +228,7 @@ public class Repository  {
     }
 
     public Passenger getPassengerByLogin(String login) throws DBConnectionException,HaveNotUserEx{
-        if(paslist!=null ){
+        if(!paslist.isEmpty() ){
             for (Passenger item : paslist) {
                 if (item.getLogin().equals(login)) {
                     return item;
@@ -246,7 +250,7 @@ public class Repository  {
     }
 
     public Order getOrderById(int id) throws DBConnectionException{
-        if(oplist!=null ){
+        if(!orlist.isEmpty() ){
             for (Order item : orlist) {
                 if (item.getOrderId() == id) {
                     return item;
@@ -269,6 +273,7 @@ public class Repository  {
             if(id != -1)
             {
                 item.setOrderId(id);*/
+                item.setOrderId(orlist.size()+1);
                 orlist.add(item);
             /*}
             else
@@ -282,8 +287,31 @@ public class Repository  {
 */
     }
 
+    public void saveOrder(Order item)throws DBConnectionException{
+        try{
+            item.setExecutionDate(LocalDate.now());
+            Driver dr = this.getDriverById(item.getDriver());
+            dr.setBusy(false);
+            int id = orderDatabase.NewOrder(item);
+
+            if(id != -1)
+            {
+
+                item.setOrderId(id);
+                orlist.add(item);
+            }
+            else
+            {
+                throw new DBConnectionException();
+            }
+        }
+        catch (SQLException ex){
+            throw new DBConnectionException();
+        }
+    }
+
     public List<Order> getOrders() throws DBConnectionException{
-        if (orlist != null) {
+        if (!orlist.isEmpty() ) {
             return orlist;
         }
         else {

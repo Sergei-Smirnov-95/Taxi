@@ -22,7 +22,7 @@ public class PassengerForm extends JFrame {
     private Facade facade;
 
     public PassengerForm(String userLogin) {
-
+        super("Passenger workspace");
         setContentPane(rootPanel);
         Dimension size = new Dimension(400,300);
         setSize(size);
@@ -59,6 +59,9 @@ public class PassengerForm extends JFrame {
                 }
                 try {
                     facade.addNewOrder(sourceAddr,destAddr, userLogin, LocalDate.now());
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Order added for processing", "Thank you",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } catch (DBConnectionException e) {
                     JOptionPane.showMessageDialog(new JFrame(),
                             "Cant connect with DB", "Error",
@@ -71,7 +74,6 @@ public class PassengerForm extends JFrame {
                             frame = frame.getParent();
                         while (!(frame instanceof JFrame));
                         ((JFrame) frame).dispose();
-
                 }
             }
         });

@@ -1,5 +1,6 @@
 package GUI;
 
+import BusinessLogic.Driver;
 import BusinessLogic.Order;
 import Exceptions.DBAccessException;
 import Exceptions.DBConnectionException;
@@ -19,7 +20,6 @@ public class OperatorForm extends JFrame {
 
     private JTable Orders;
     private JButton AppointButton;
-    private JButton declineButton;
     private JTable Drivers;
     private JButton exitButton;
     private JPanel rootPanel;
@@ -29,19 +29,13 @@ public class OperatorForm extends JFrame {
     private int selectedDrivers;
 
     public OperatorForm(String userLogin){
-
+        super("Operator workspace");
         login = userLogin;
-        try {
-            facade = Facade.getInstance();
-        } catch (DBConnectionException | DBAccessException ex) {
-            JOptionPane.showMessageDialog(new JFrame(),
-                    ex.toString(),  "Allert",
-                    JOptionPane.WARNING_MESSAGE);
-        }
+
 
         this.setContentPane(rootPanel);
         this.setLocationRelativeTo(null);
-        Dimension size = new Dimension(400, 200);
+        Dimension size = new Dimension(400, 300);
         this.setSize(size);
         this.setMaximumSize(size);
         this.setMinimumSize(size);
@@ -53,22 +47,32 @@ public class OperatorForm extends JFrame {
     }
 
     void initHandlers(){
+        try {
+            facade = Facade.getInstance();
+        } catch (DBConnectionException | DBAccessException ex) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    ex.toString(),  "Allert",
+                    JOptionPane.WARNING_MESSAGE);
+        }
         OperatorForm thisFrame =  this;
         AppointButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                /*try {
-                    facade.acceptRequest(selectedRequest, login);
+                try {
+                    facade.appointOrdertoDriver(selectedOrders,selectedDrivers, login);
                     populateTables();
-                    //for()
-                    /*decline other, populate*/
-                /*} catch ( DBConnectionException  e) {
+
+                } catch ( DBConnectionException  e) {
                     JOptionPane.showMessageDialog(new JFrame(),
                             e.toString(),  "Cannot connect to DB",
                             JOptionPane.WARNING_MESSAGE);
                 }
+                catch (HaveNotUserEx ex){
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            ex.toString(),  "Cant find user with this id",
+                            JOptionPane.WARNING_MESSAGE);
+                }
 
-*/
             }
         });
 
@@ -120,14 +124,14 @@ public class OperatorForm extends JFrame {
 
     private void populateTables(){
         //table new orders
-        DefaultTableModel model = (DefaultTableModel) NewOrders.getModel();
+        DefaultTableModel model = (DefaultTableModel) Orders.getModel();
         model.setRowCount(0);
         model.setColumnCount(3);
         Object[] cols = new Object[]{"id", "SourceAddr", "DestAddr"};
         model.setColumnIdentifiers(cols);
         try {
-
-            java.util.List<Order> orlist= facade.getAppointedOrdersByDriver(login);
+            //model.addRow(new Object[]{"id", "source ", "dest "});
+            java.util.List<Order> orlist= facade.getNewOrders(login);
             for(Order or : orlist) {
                 model.addRow(new Object[]{or.getOrderId(),or.getSourceAddress(),or.getDestinationAddress()});
             }
@@ -147,23 +151,20 @@ public class OperatorForm extends JFrame {
             while (!(frame instanceof JFrame));
             ((JFrame) frame).dispose();
         }
-        NewOrders.setModel(model);
-        NewOrders.repaint();
-        //table old orders
-        DefaultTableModel modeltab = (DefaultTableModel) Orders.getModel();
+        Orders.setModel(model);
+        Orders.repaint();
+        //table drivers
+        DefaultTableModel modeltab = (DefaultTableModel) Drivers.getModel();
         modeltab.setRowCount(0);
-        modeltab.setColumnCount(3);
+        modeltab.setColumnCount(2);
+        cols = new Object[]{"id", "raiting"};
         modeltab.setColumnIdentifiers(cols);
         try {
-
-            java.util.List<Order> orlist= facade.getOrdersByDriver(login);
-            for(Order or : orlist) {
-                modeltab.addRow(new Object[]{or.getOrderId(),or.getSourceAddress(),or.getDestinationAddress()});
+            //modeltab.addRow(new Object[]{"id", "raiting"});
+            java.util.List<Driver> drlist= facade.getAvailableDrivers(login);
+            for(Driver dr : drlist) {
+                modeltab.addRow(new Object[]{dr.getId(),dr.getRating()});
             }
-
-        } catch (HaveNotOrderEx ex)
-        {
-            modeltab.addRow(new Object[]{"-","-","-"});
         }
         catch (HaveNotUserEx | DBConnectionException ex)
         {
@@ -176,8 +177,9 @@ public class OperatorForm extends JFrame {
             while (!(frame instanceof JFrame));
             ((JFrame) frame).dispose();
         }
-        Orders.setModel(modeltab);
-        Orders.repaint();
+
+        Drivers.setModel(modeltab);
+        Drivers.repaint();
     }
 
 

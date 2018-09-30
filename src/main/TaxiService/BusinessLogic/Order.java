@@ -34,10 +34,10 @@ public class Order {
                              float waitingTime, float totalCost, String Complaint, boolean isPaied){
         this.setDriverId(driverId);
         this.setOperator(operatorId);
-        this.setOrderStatus(orderStatus);
+        this.setStatus(orderStatus);
         this.setOrderId(id);
         this.setExecutionDate(executionDate);
-        this.setCostCalculation( new CostCalculation(waitingTime,routelength));
+        this.setCostCalculation(waitingTime,routelength);
         this.isPaied = isPaied;
         return this ;
     }
@@ -61,14 +61,12 @@ public class Order {
         return operatorId;
     }
 
+    public boolean isPayed() {return isPaied;}
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-   /* public float getRating() {
-        return rating;
-    }
-*/
+
     public LocalDate getCreationDate() {
         return creationDate;
     }
@@ -101,6 +99,10 @@ public class Order {
             this.operatorId = operator;
     }
 
+    private void setStatus(OrderStatus os){
+        this.orderStatus = os;
+    }
+
     public boolean setOrderStatus(OrderStatus orderStatus) {
         if(OrderStatus.isAvailable(this.orderStatus, orderStatus)){
             this.orderStatus = orderStatus;
@@ -108,30 +110,23 @@ public class Order {
         }
         return false;
     }
-/*
-    public boolean setRating(float rating) {
-        if(rating > 0 && rating <= 5) {
-            this.rating = rating;
-            return true;
-        }
-        return false;
+    public void pay(){
+        isPaied = true;
     }
-*/
-    public void setCreationDate(LocalDate creationDate) {
-            this.creationDate = creationDate;
 
-    }
 
     public boolean setExecutionDate(LocalDate executionDate) {
-        if(executionDate.isAfter(creationDate)) {
+        //if(executionDate.isAfter(creationDate)) {
             this.executionDate = executionDate;
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
 
-    public void setCostCalculation(CostCalculation costCalculation) {
-        this.costCalculation = costCalculation;
+    public void setCostCalculation(float waitingTime,float routelength) {
+        CostCalculation cc =new CostCalculation(waitingTime,routelength);
+        this.costCalculation = cc;
+        this.pay();
     }
 
     public void setOrderId(int id){

@@ -26,7 +26,7 @@ public class NewUserForm extends JFrame {
     private Facade facade;
 
     public NewUserForm() {
-
+        super("New user form");
         setContentPane(NewUser);
         Dimension size = new Dimension(400,300);
         setSize(size);
@@ -76,17 +76,17 @@ public class NewUserForm extends JFrame {
                     {
                         try {
                             if (PassengerJ.isSelected()) {
-                                facade.addNewPassenger(0, userLogin, userPass, name, email, phone);
+                                facade.addNewPassenger(10, userLogin, userPass, name, email, phone);
                                 thisFrame.dispose();
                                 PassengerForm passengerForm = new PassengerForm(userLogin);
                                 passengerForm.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                             } else if (OperatorJ.isSelected()) {
-                                facade.addNewOperator(0, userLogin, userPass, name, email, phone);
+                                facade.addNewOperator(10, userLogin, userPass, name, email, phone);
                                 thisFrame.dispose();
                                 OperatorForm operatorForm = new OperatorForm(userLogin);
                                 operatorForm.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                             } else if (DriverJ.isSelected()) {
-                                facade.addNewDriver(0, userLogin, userPass, name, email, phone, 0);
+                                facade.addNewDriver(10, userLogin, userPass, name, email, phone, 0);
                                 thisFrame.dispose();
                                 DriverForm driverForm = new DriverForm(userLogin);
                                 driverForm.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

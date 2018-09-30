@@ -14,8 +14,6 @@ public class Passenger extends User {
     public Order createOrder( String sourceAddress, String destinationAddress){
         Order order = new Order(sourceAddress,destinationAddress,this.getId(),
                 new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        //orderList.add(order);
-        //System.out.println("Order created by "+this.getName());
         return order;
     }
 
@@ -37,8 +35,8 @@ public class Passenger extends User {
         return order.setOrderStatus(OrderStatus.DEAD);
     }
 
-    void puyBill(){
-
+    void puyBill(Order or){
+        or.pay();
     }
 
 }

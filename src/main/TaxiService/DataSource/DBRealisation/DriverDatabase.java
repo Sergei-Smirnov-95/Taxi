@@ -44,8 +44,10 @@ public class DriverDatabase  {
         extractUserStatement.setString(1, login);
         ResultSet rs = extractUserStatement.executeQuery();
 
-        if (!rs.next()) return null;
-
+        if (!rs.next())
+            return null;
+        if ( rs.getInt("TypeUser") != 2)
+            return null;
         int id = rs.getInt("id");
         String pwd = rs.getString("pwd");
         String name = rs.getString("name");

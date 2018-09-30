@@ -20,7 +20,7 @@ public class Login extends JFrame{
 
     private Facade facade;
     public Login() {
-
+        super("Registration form");
         setContentPane(loginPanel);
         Dimension size = new Dimension(400,300);
         setSize(size);

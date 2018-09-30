@@ -72,6 +72,30 @@ public class Driver extends User{
             throw new HaveNotOrderEx();
         return appointedOrderList;
     }
+    public boolean acceptRequest(Order order){
+        if(order.setOrderStatus(OrderStatus.ACCEPTED)) {
+            this.setBusy(true);
+            order.setDriverId(this.getId());
+            return true;
+        }
+        return false;
+    }
+    public boolean declineRequest(Order order){
+        if(order.setOrderStatus(OrderStatus.DECLINED)) {
+            //this.setBusy(false);
+            return true;
+        }
+        return false;
+    }
+    public void declineOther(List<Order> or) throws HaveNotOrderEx {
+        or = this.getAppointedList(or);
+        for (Order order : or) {
+            if(! declineRequest(order))
+            {
+                throw new HaveNotOrderEx();
+            }
+        }
+    }
 /*
     public boolean acceptOrder(Order order){
         if(order.setOrderStatus(OrderStatus.ACCEPTED)) {

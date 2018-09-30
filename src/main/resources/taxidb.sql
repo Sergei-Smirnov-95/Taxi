@@ -43,7 +43,7 @@ INSERT INTO `User`(login, pwd, name, email, phone, authenticated, isBusy, rating
    ("op1","111","Pavel","a@yandex.ru","12345",false, false, 0.0, 0 ),
    ("us1","111","Olga", "b@yandex.ru","12346", false, false, 0.0,1 ),
    ("us2","111","Sergei", "c@yandex.ru","12347", false, false, 0.0,1 ),
-   ("dr2","111","Anton", "d@yandex.ru","12348", false, false, 1.0,2 ),
+   ("dr1","111","Anton", "d@yandex.ru","12348", false, false, 1.0,2 ),
    ("dr2","111","Lex", "e@yandex.ru","12349", false, false, 2.0,2 );
    
    

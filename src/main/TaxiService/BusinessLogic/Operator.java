@@ -1,5 +1,6 @@
 package BusinessLogic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Operator extends User {
@@ -25,18 +26,34 @@ public class Operator extends User {
         return false;
     }
     public List<Driver> getAvailableDrivers(List<Driver> drlist){
+        List<Driver> drl =  new ArrayList();
         for (Driver item : drlist) {
-            if (item.isBusy() == true) {
-                drlist.remove(item);
+            if (item.isBusy() != true) {
+                drl.add(item);
             }
         }
-        return drlist;
+        //drlist.clear();
+        return drl;
     }
-/*
-    public boolean appointDriverToOrder(Order order, int driver){
-        return order.setDriverId(driver) && order.setOrderStatus(OrderStatus.APPOINTED);
+
+    public List<Order> getNewOrders(List<Order> orlist){
+        List<Order> orl = new ArrayList();
+        for(Order or:orlist){
+            //System.out.println(or.getOrderStatus());
+            if(or.getOrderStatus().equals(OrderStatus.NEW) || (or.getOrderStatus().equals(OrderStatus.PROCESSING))) {
+                or.setOrderStatus(OrderStatus.PROCESSING);
+                orl.add(or);
+            }
+        }
+        //orlist.clear();
+        return orl;
     }
-*/
+
+    public void appointOrder(int selectedDriver,Order or) {
+        or.setDriverId(selectedDriver);
+        or.setOrderStatus(OrderStatus.APPOINTED);
+        or.setOperator(this.getId());
+    }
     public boolean confirmComplaint(Complaint complaint){
         if(!complaint.getPassengerText().isEmpty()) {
             complaint.setConfirmed(true);

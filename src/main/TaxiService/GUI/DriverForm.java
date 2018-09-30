@@ -28,14 +28,9 @@ public class DriverForm extends JFrame {
     private int selectedRequest;
 
     public DriverForm(String userLogin) {
+        super("Driver workspace");
         login = userLogin;
-        try {
-            facade = Facade.getInstance();
-        } catch (DBConnectionException | DBAccessException ex) {
-            JOptionPane.showMessageDialog(new JFrame(),
-                    ex.toString(),  "Allert",
-                    JOptionPane.WARNING_MESSAGE);
-        }
+
 
         this.setContentPane(rootPanel);
         this.setLocationRelativeTo(null);
@@ -51,17 +46,34 @@ public class DriverForm extends JFrame {
 
     void initHandlers(){
         DriverForm thisFrame=  this;
+        try {
+            facade = Facade.getInstance();
+        } catch (DBConnectionException | DBAccessException ex) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    ex.toString(),  "Allert",
+                    JOptionPane.WARNING_MESSAGE);
+        }
         AcceptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     facade.acceptRequest(selectedRequest, login);
+                    facade.declineOther(login);
                     populateTables();
-                    //for()
-                    /*decline other, populate*/
+                    thisFrame.dispose();
+                    PayInfo pi = new PayInfo(selectedRequest);
+                    pi.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 } catch ( DBConnectionException  e) {
                     JOptionPane.showMessageDialog(new JFrame(),
                             e.toString(),  "Cannot connect to DB",
+                            JOptionPane.WARNING_MESSAGE);
+                } catch (HaveNotUserEx e){
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            e.toString(),  "Cannot accept",
+                            JOptionPane.WARNING_MESSAGE);
+                } catch (HaveNotOrderEx e){
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            e.toString(),  "Cannot find user",
                             JOptionPane.WARNING_MESSAGE);
                 }
 
@@ -78,7 +90,11 @@ public class DriverForm extends JFrame {
                     JOptionPane.showMessageDialog(new JFrame(),
                             e.toString(),  "Cannot connect to DB",
                             JOptionPane.WARNING_MESSAGE);
-                }
+                } catch (HaveNotUserEx e){
+                JOptionPane.showMessageDialog(new JFrame(),
+                        e.toString(),  "Cannot decline",
+                        JOptionPane.WARNING_MESSAGE);
+            }
 
             }
 
